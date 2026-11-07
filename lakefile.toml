@@ -1,0 +1,35 @@
+name = "a039943"
+version = "0.1.0"
+defaultTargets = ["A046253Defs", "A007770Defs", "A007770Cert",
+  "A007770", "A039943", "Spec_A039943", "Check_Spec_A039943",
+  "Check_AntiVacuite_A039943"]
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+git = "https://github.com/leanprover-community/mathlib4.git"
+rev = "v4.35.0"
+
+[[lean_lib]]
+name = "A046253Defs"
+
+[[lean_lib]]
+name = "A007770Defs"
+
+[[lean_lib]]
+name = "A007770Cert"
+
+[[lean_lib]]
+name = "A007770"
+
+[[lean_lib]]
+name = "A039943"
+
+[[lean_lib]]
+name = "Spec_A039943"
+
+[[lean_lib]]
+name = "Check_Spec_A039943"
+
+[[lean_lib]]
+name = "Check_AntiVacuite_A039943"

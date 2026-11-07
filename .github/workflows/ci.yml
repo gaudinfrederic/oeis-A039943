@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install elan (Lean toolchain)
+        run: |
+          curl -sSfL https://release.lean-lang.org/lean4/elan-init.sh \
+            | sh -s -- -y
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Toolchain fingerprint
+        run: |
+          elan show
+          lean --version
+          sha256sum "$(which lean)"
+
+      - name: Fetch mathlib olean cache
+        run: lake exe cache get
+
+      - name: Build (kernel)
+        run: lake build
+
+      - name: Paranoid multi-kernel check (leanchecker+nanoda+lean4lean)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y bubblewrap
+          sudo chmod u+s "$(which bwrap)"
+          lake check --paranoid
+
+      # Expected output on every audited declaration:
+      #   '<name>' depends on axioms: [propext, Classical.choice, Quot.sound]
+      # Audited: A039943 (main theorem) + cyc770_sub_att + ATT039943,
+      # proven_spec_a039943 + SpecPropA039943 (N0 spec closure),
+      # sat943/anchor943_zero/anchor943_cycle/ablation943 (N3),
+      # A007770 + reaches_S + iterateT_eq_nat (dichotomy closure),
+      # cert_orbits770 + cert_descent770 (kernel decide certificates).
+      - name: Axioms report (expected: propext, Classical.choice, Quot.sound)
+        run: |
+          printf 'import A039943\nimport Spec_A039943\nimport Check_Spec_A039943\nimport Check_AntiVacuite_A039943\nimport A007770\nimport A007770Defs\nimport A007770Cert\nimport A046253Defs\n#print axioms A039943\n#print axioms cyc770_sub_att\n#print axioms ATT039943\n#print axioms proven_spec_a039943\n#print axioms SpecPropA039943\n#print axioms sat943\n#print axioms anchor943_zero\n#print axioms anchor943_cycle\n#print axioms ablation943\n#print axioms A007770\n#print axioms reaches_S\n#print axioms iterateT_eq_nat\n#print axioms cert_orbits770\n#print axioms cert_descent770\n' > AxiomsReport.lean
+          lake env lean AxiomsReport.lean
+          rm AxiomsReport.lean
+
+  # N6 zero-trust scan: forbidden tokens on the publishable files.
+  # Comments (nested /- -/ and line --) and string literals are
+  # stripped by a Python state machine - never a regex - before
+  # the token search. Exit code 0 = zero hit.
+  scan-n6:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Zero-trust scan (forbidden tokens, state-machine filter)
+        run: python scan_n6.py
