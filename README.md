@@ -116,7 +116,7 @@ Expected `#print axioms` output on every audited declaration
 
 ## Provenance
 
-Developed under the DemosMathNT program (multi-session OEIS
+Developed under the present formalization program (multi-session OEIS
 conjecture formalization effort). The OEIS statement was
 submitted verbatim to three independent oracles before
 packaging (unanimous `VALIDE` on statement fidelity,
