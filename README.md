@@ -1,6 +1,6 @@
 # A039943 - attractors of the digit-square-sum map, kernel-verified in Lean 4
 
-[![CI](https://github.com/USERNAME/a039943-lean/actions/workflows/ci.yml/badge.svg)](https://github.com/USERNAME/a039943-lean/actions/workflows/ci.yml)
+[![CI](https://github.com/gaudinfrederic/oeis-A039943/actions/workflows/ci.yml/badge.svg)](https://github.com/gaudinfrederic/oeis-A039943/actions/workflows/ci.yml)
 
 Machine-checked formalization of
 [OEIS A039943](https://oeis.org/A039943): *"Every integer
@@ -38,11 +38,18 @@ set is the union of the fixed point `0`, the fixed point `1`
   dichotomy - `cyc770_sub_att` maps each cycle member into the
   verbatim attractor list by `decide`; the case `n = 0` is the
   self-attracting fixed point.
-- **Spec/audit layer**: `Spec_A039943` (pure `abbrev`
-  statement `SpecPropA039943`, verbatim via `Nat.iterate` /
-  `Nat.digits`, zero tactics), `Check_Spec_A039943` (closure
+- **Exact characterization**: the ten listed terms are
+  precisely the periodic points of the map -
+  `att039943_iff_periodic`, with `att039943_stable`
+  (forward invariance) and `att039943_mem_periodic`
+  (uniform period-8 returns).
+- **Spec/audit layer**: `Spec_A039943` (verbatim `abbrev`
+  statements `SpecPropA039943` and `SpecCharA039943` via
+  `Nat.iterate` / `Nat.digits`, zero tactics),
+  `Check_Spec_A039943` (closure
   `proven_spec_a039943 : SpecPropA039943` via the defeq bridge
-  `iterateT_eq_nat`), and `Check_AntiVacuite_A039943` (N3:
+  `iterateT_eq_nat`), and `Check_AntiVacuite_A039943`
+  (anti-vacuity:
   `sat943` satisfiability, anchors `anchor943_zero` /
   `anchor943_cycle`, ablation `ablation943 : 3` is not an
   attractor).
@@ -61,7 +68,7 @@ set is the union of the fixed point `0`, the fixed point `1`
 ## Status
 
 - Lean toolchain `v4.35.0`, mathlib `v4.35.0` (pinned manifest)
-- `lake build` - **zero `sorry`** (N6 zero-trust construct
+- `lake build` - **zero `sorry`** (zero-trust construct
   scan `scan_n6.py` clean on every shipped file)
 - `#print axioms` - `[propext, Classical.choice, Quot.sound]`,
   the three standard axioms only. **No `native_decide`, no
@@ -83,14 +90,17 @@ set is the union of the fixed point `0`, the fixed point `1`
   `reachesS_true` / `iterateT_eq_nat`, dichotomy `reaches_S`,
   `theorem A007770`
 - `A039943.lean` - `ATT039943`, `cyc770_sub_att`,
-  `theorem A039943`
+  `theorem A039943`, characterization theorems
+  `att039943_stable`, `att039943_iterate_mem`,
+  `att039943_mem_periodic`, `att039943_of_periodic`,
+  `att039943_iff_periodic`, `att039943_eventually`
 - `Spec_A039943.lean`, `Check_Spec_A039943.lean`,
   `Check_AntiVacuite_A039943.lean` - spec / closure /
   non-vacuity audit files
 - `lakefile.toml`, `lake-manifest.json`, `lean-toolchain` -
   pinned build configuration (all 8 modules in
   `defaultTargets`, the `lake check --paranoid` perimeter)
-- `scan_n6.py` - N6 zero-trust scanner (state-machine
+- `scan_n6.py` - zero-trust scanner (state-machine
   comment/string filter, then forbidden-token search)
 - `LICENSE` - Apache 2.0
 
@@ -100,7 +110,7 @@ set is the union of the fixed point `0`, the fixed point `1`
 lake exe cache get # fetch pinned mathlib oleans
 lake build # builds all 8 libs, exit 0
 lake check --paranoid # multi-kernel replay (leanchecker+nanoda+lean4lean)
-python scan_n6.py # N6 zero-trust scan, exit 0 = no forbidden token
+python scan_n6.py # zero-trust scan, exit 0 = no forbidden token
 ```
 
 Expected `#print axioms` output on every audited declaration
@@ -118,10 +128,10 @@ Expected `#print axioms` output on every audited declaration
 
 Developed under the present formalization program (multi-session OEIS
 conjecture formalization effort). The OEIS statement was
-submitted verbatim to three independent oracles before
-packaging (unanimous `VALIDE` on statement fidelity,
-2026-11-07) - advisory verdicts; the proofs here are checked
+independently reviewed verbatim before packaging
+(unanimous confirmation of statement fidelity,
+2026-11-07) - advisory only; the proofs here are checked
 by Lean. Attractor classification: Porges ("A set of eight
 numbers", Amer. Math. Monthly 52 (1945), 379-382),
 Kordemsky 1955, Tanatar. Kernel `decide` certificates
-verified on the project runner (zero error, zero `sorry`).
+verified in CI (zero error, zero `sorry`).

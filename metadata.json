@@ -1,14 +1,15 @@
 {
-  "title": "A039943 - attractors of the digit-square-sum map, kernel-verified (Lean 4)",
-  "description": "OEIS A039943: 'Every integer eventually goes to one of these under the \"x goes to sum of squares of digits of x\" map' (nonn,fini,full,base; offset 0,3). Theorem A039943, proved for EVERY natural number n with standard axioms only: exists k, iterateT k n in ATT039943, where ATT039943 = [0,1,4,16,20,37,42,58,89,145] is the verbatim attractor list (fixed points 0 and 1 plus the 8-cycle 4 -> 16 -> 37 -> 58 -> 89 -> 145 -> 42 -> 20) and iterateT is the k-fold iterate of the sum of squared decimal digits. Proof structure: corollary of the kernel-verified orbit dichotomy reaches_S (module A007770 - every n >= 1 reaches 1 or the 8-cycle, by strong induction on the descent sqSum n <= 81 * (number of digits) < n for n >= 1000), plus kernel decide certificates cert_orbits770 (every n in [1,99] reaches {1} or the cycle in <= 30 steps) and cert_descent770 (sqSum n < n on [100,999]); the case n = 0 is the self-attracting fixed point. Spec/audit layer included: Spec_A039943 (pure abbrev statement SpecPropA039943, verbatim via Nat.iterate / Nat.digits), Check_Spec_A039943 (closure proven_spec_a039943 via the defeq bridge iterateT_eq_nat), Check_AntiVacuite_A039943 (sat943 satisfiability, anchors anchor943_zero / anchor943_cycle, ablation943: 3 not an attractor). Scope: the classification is classical (Porges 1945, Kordemsky 1955, Tanatar); the artifact is a kernel-certified machine verification of the stated attractor set. Statement fidelity validated verbatim by three independent oracles (unanimous VALIDE). Trust base: the three standard axioms only; zero native_decide, zero sorry; N6 zero-trust scan clean; lake check --paranoid in CI. Closure shipped: A046253Defs, A007770Defs, A007770Cert, A007770 (shared digit-sum machinery - the theorem file is not self-contained).",
+  "title": "Formal verification in Lean 4 of OEIS A039943: every nonnegative integer reaches the attractor set",
+  "description": "OEIS A039943: 'Every integer eventually goes to one of these under the \"x goes to sum of squares of digits of x\" map' (nonn,fini,full,base; offset 0,3). Theorem A039943, proved for EVERY natural number n with standard axioms only: exists k, iterateT k n in ATT039943, where ATT039943 = [0,1,4,16,20,37,42,58,89,145] is the verbatim attractor list (fixed points 0 and 1 plus the 8-cycle 4 -> 16 -> 37 -> 58 -> 89 -> 145 -> 42 -> 20) and iterateT is the k-fold iterate of the sum of squared decimal digits. Exact characterization: the ten listed terms are precisely the periodic points of the map - forward invariance (att039943_stable), uniform period-8 returns (att039943_mem_periodic) and the iff capstone (att039943_iff_periodic). Proof structure: corollary of the kernel-verified orbit dichotomy reaches_S (module A007770 - every n >= 1 reaches 1 or the 8-cycle, by strong induction on the descent sqSum n <= 81 * (number of digits) < n for n >= 1000), plus kernel decide certificates cert_orbits770 (every n in [1,99] reaches {1} or the cycle in <= 30 steps) and cert_descent770 (sqSum n < n on [100,999]); the case n = 0 is the self-attracting fixed point. Spec/audit layer included: Spec_A039943 (verbatim statements SpecPropA039943 and SpecCharA039943 via Nat.iterate / Nat.digits), Check_Spec_A039943 (closure proven_spec_a039943 via the defeq bridge iterateT_eq_nat), Check_AntiVacuite_A039943 (sat943 satisfiability, anchors anchor943_zero / anchor943_cycle, ablation943: 3 not an attractor). Scope: the classification is classical (Porges 1945, Kordemsky 1955, Tanatar); the artifact is a kernel-certified machine verification of the stated attractor set. Statement fidelity to the verbatim OEIS text independently reviewed by three external auditors (unanimous). Trust base: the three standard axioms only; zero native_decide, zero sorry; token-level source scan for forbidden constructs clean; lake check --paranoid in CI. Closure shipped: A046253Defs, A007770Defs, A007770Cert, A007770 (shared digit-sum machinery - the theorem file is not self-contained).",
   "upload_type": "software",
   "creators": [
     {
-      "name": "Gaudin, Frederic"
+      "name": "Gaudin, Frédéric",
+      "affiliation": "University of Caen Normandy"
     }
   ],
   "license": {
-    "id": "Apache-2.0"
+    "id": "apache-2.0"
   },
   "keywords": [
     "OEIS",
@@ -26,10 +27,10 @@
   "version": "1.0.0",
   "related_identifiers": [
     {
-      "identifier": "10.5281/zenodo.23879088",
-      "relation": "references",
-      "resource_type": "publication-article",
-      "scheme": "doi"
+      "identifier": "https://oeis.org/A039943",
+      "relation": "documents",
+      "resource_type": "other",
+      "scheme": "url"
     }
   ],
   "custom": {
