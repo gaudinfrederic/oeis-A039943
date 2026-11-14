@@ -31,6 +31,12 @@
       "relation": "documents",
       "resource_type": "other",
       "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/gaudinfrederic/oeis-A039943",
+      "relation": "isSupplementedBy",
+      "resource_type": "software",
+      "scheme": "url"
     }
   ],
   "custom": {
